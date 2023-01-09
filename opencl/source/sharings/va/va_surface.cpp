@@ -45,9 +45,10 @@ bool VASurface::isSupportedPackedFormat(uint32_t imageFourcc) {
 
 VAStatus VASurface::getSurfaceDescription(SharedSurfaceInfo &surfaceInfo, VASharingFunctions *sharingFunctions, VASurfaceID *surface) {
     VADRMPRIMESurfaceDescriptor vaDrmPrimeSurfaceDesc = {};
+    printf("====================VASurface::getSurfaceDescription\n");
     auto vaStatus = sharingFunctions->exportSurfaceHandle(*surface,
                                                           VA_SURFACE_ATTRIB_MEM_TYPE_DRM_PRIME_2,
-                                                          VA_EXPORT_SURFACE_READ_WRITE | VA_EXPORT_SURFACE_SEPARATE_LAYERS,
+                                                          VA_EXPORT_SURFACE_READ_WRITE | VA_EXPORT_SURFACE_COMPOSED_LAYERS,
                                                           &vaDrmPrimeSurfaceDesc);
     if (VA_STATUS_SUCCESS == vaStatus) {
         surfaceInfo.imageId = VA_INVALID_ID;
@@ -167,7 +168,7 @@ Image *VASurface::createSharedVaSurface(Context *context, VASharingFunctions *sh
     std::unique_lock<std::mutex> lock(sharingFunctions->mutex);
 
     auto result = getSurfaceDescription(sharedSurfaceInfo, sharingFunctions, surface);
-
+printf("================result = %d\n", result);
     if (result != VA_STATUS_SUCCESS) {
         *errcodeRet = static_cast<cl_int>(result);
         return nullptr;
@@ -285,6 +286,7 @@ const ClSurfaceFormatInfo *VASurface::getExtendedSurfaceFormatInfo(uint32_t form
                                                             2,
                                                             1,
                                                             2}};
+	printf("================VA_FOURCC_YUY2\n");
         return &formatInfoYUY2;
     }
     if (formatFourCC == VA_FOURCC_Y210) {
