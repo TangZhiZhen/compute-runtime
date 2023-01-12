@@ -1097,7 +1097,6 @@ TEST_F(ApiVaSharingTests, givenSupportedImageTypeWhenGettingSupportedVAApiFormat
     supportedFormats.push_back(std::make_unique<VAImageFormat>(VAImageFormat{VA_FOURCC_NV12, VA_LSB_FIRST, 0, 0, 0, 0, 0, 0}));
     supportedFormats.push_back(std::make_unique<VAImageFormat>(VAImageFormat{VA_FOURCC_P010, VA_LSB_FIRST, 0, 0, 0, 0, 0, 0}));
     supportedFormats.push_back(std::make_unique<VAImageFormat>(VAImageFormat{VA_FOURCC_P016, VA_LSB_FIRST, 0, 0, 0, 0, 0, 0}));
-    supportedFormats.push_back(std::make_unique<VAImageFormat>(VAImageFormat{VA_FOURCC_YUY2, VA_LSB_FIRST, 0, 0, 0, 0, 0, 0}));
 
     for (auto flag : flags) {
 
@@ -1113,7 +1112,7 @@ TEST_F(ApiVaSharingTests, givenSupportedImageTypeWhenGettingSupportedVAApiFormat
                 &numImageFormats);
 
             EXPECT_EQ(CL_SUCCESS, result);
-            EXPECT_EQ(4u, numImageFormats);
+            EXPECT_EQ(3u, numImageFormats);
             int i = 0;
             for (auto &format : supportedFormats) {
                 EXPECT_EQ(format->fourcc, vaApiFormats[i++].fourcc);
@@ -1139,7 +1138,7 @@ TEST_F(ApiVaSharingTests, givenZeroNumEntriesWhenGettingSupportedVAApiFormatsThe
             &numImageFormats);
 
         EXPECT_EQ(CL_SUCCESS, result);
-        EXPECT_EQ(4u, numImageFormats);
+        EXPECT_EQ(3u, numImageFormats);
     }
 }
 
@@ -1463,30 +1462,6 @@ TEST_F(VaSharingTests, givenPlaneArgumentLessThan2WithProperFormatsAndSupportedF
     EXPECT_EQ(static_cast<uint32_t>(VA_FOURCC_P016), vaApiFormats[2].fourcc);
     EXPECT_EQ(static_cast<uint32_t>(VA_FOURCC_RGBP), vaApiFormats[3].fourcc);
     EXPECT_EQ(static_cast<uint32_t>(VA_FOURCC_YUY2), vaApiFormats[4].fourcc);
-}
-
-TEST_F(VaSharingTests, givenPlaneArgumentLessThan2WithPackedFormatsAndSupportedFormatsVectorsThenAllPackedFormatsAreReturned) {
-    VASharingFunctionsMock sharingFunctions;
-    EXPECT_EQ(sharingFunctions.supported2PlaneFormats.size(), 0u);
-    EXPECT_EQ(sharingFunctions.supported3PlaneFormats.size(), 0u);
-    EXPECT_EQ(sharingFunctions.supportedPackedFormats.size(), 0u);
-
-    cl_mem_flags flags = CL_MEM_READ_WRITE;
-    cl_mem_object_type imageType = CL_MEM_OBJECT_IMAGE2D;
-    cl_uint numImageFormats = 5;
-    VAImageFormat vaApiFormats[5] = {};
-
-    sharingFunctions.supportedPackedFormats.push_back(VAImageFormat{VA_FOURCC_YUY2, VA_LSB_FIRST, 0, 0, 0, 0, 0, 0});
-
-    sharingFunctions.getSupportedFormats(
-        flags,
-        imageType,
-        0,
-        5,
-        vaApiFormats,
-        &numImageFormats);
-
-    EXPECT_EQ(static_cast<uint32_t>(VA_FOURCC_YUY2), vaApiFormats[0].fourcc);
 }
 
 TEST_F(VaSharingTests, givenPlaneArgumentLessThan2WithProperFormatsAndOnly3PlaneSupportedFormatsVectorThen3PlaneFormatIsReturned) {
