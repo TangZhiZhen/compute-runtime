@@ -122,7 +122,7 @@ class VASharingFunctionsMock : public VASharingFunctions {
             return queryImageFormatsReturnStatus;
         }
         if (numFormats) {
-            *numFormats = 6;
+            *numFormats = 5;
         }
 
         if (formatList) {
@@ -145,16 +145,12 @@ class VASharingFunctionsMock : public VASharingFunctions {
             formatList[4].fourcc = VA_FOURCC_YUY2;
             formatList[4].bits_per_pixel = 16;
             formatList[4].byte_order = VA_LSB_FIRST;
-
-            formatList[5].fourcc = VA_FOURCC_Y210;
-            formatList[5].bits_per_pixel = 32;
-            formatList[5].byte_order = VA_LSB_FIRST;
         }
         return VA_STATUS_SUCCESS;
     }
 
     int maxNumImageFormats(VADisplay vaDisplay) override {
-        return 6;
+        return 5;
     }
 };
 
