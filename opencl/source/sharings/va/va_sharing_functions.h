@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2022 Intel Corporation
+ * Copyright (C) 2017-2021 Intel Corporation
  *
  * SPDX-License-Identifier: MIT
  *
@@ -98,7 +98,6 @@ class VASharingFunctions : public SharingFunctions {
     VAQueryImageFormatsPFN vaQueryImageFormatsPFN;
     VAMaxNumImageFormatsPFN vaMaxNumImageFormatsPFN;
 
-    std::vector<VAImageFormat> supportedPackedFormats;
     std::vector<VAImageFormat> supported2PlaneFormats;
     std::vector<VAImageFormat> supported3PlaneFormats;
 };

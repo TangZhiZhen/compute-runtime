@@ -20,7 +20,6 @@ class VASharingFunctionsMock : public VASharingFunctions {
     using VASharingFunctions::mutex;
     using VASharingFunctions::supported2PlaneFormats;
     using VASharingFunctions::supported3PlaneFormats;
-    using VASharingFunctions::supportedPackedFormats;
 
     VAImage mockVaImage = {};
     int32_t derivedImageFormatFourCC = VA_FOURCC_NV12;
@@ -28,7 +27,6 @@ class VASharingFunctionsMock : public VASharingFunctions {
     uint16_t derivedImageHeight = 256;
     uint16_t derivedImageWidth = 256;
     VAStatus queryImageFormatsReturnStatus = VA_STATUS_SUCCESS;
-    VAStatus deriveImageReturnStatus = VA_STATUS_SUCCESS;
 
     bool isValidDisplayCalled = false;
     bool deriveImageCalled = false;
@@ -62,9 +60,6 @@ class VASharingFunctionsMock : public VASharingFunctions {
     VASharingFunctionsMock() : VASharingFunctionsMock(nullptr){};
 
     VAStatus deriveImage(VASurfaceID vaSurface, VAImage *vaImage) override {
-        if (deriveImageReturnStatus != VA_STATUS_SUCCESS) {
-            return deriveImageReturnStatus;
-        }
         deriveImageCalled = true;
         uint32_t pitch;
         vaImage->height = derivedImageHeight;
