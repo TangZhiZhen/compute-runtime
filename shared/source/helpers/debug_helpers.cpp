@@ -17,7 +17,6 @@ void debugBreak(int line, const char *file) {
     if (DebugManager.flags.EnableDebugBreak.get()) {
         printf("Assert was called at %d line in file:\n%s\n", line, file);
         fflush(stdout);
-        assert(false);
     }
 }
 void abortUnrecoverable(int line, const char *file) {
