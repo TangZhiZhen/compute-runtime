@@ -94,10 +94,10 @@ const ClSurfaceFormatInfo SurfaceFormats::writeOnlySurfaceFormats[] = { COMMONFO
 const ClSurfaceFormatInfo SurfaceFormats::readWriteSurfaceFormats[] = { COMMONFORMATS };
 
 const ClSurfaceFormatInfo SurfaceFormats::packedYuvSurfaceFormats[] = {
-    {{CL_YUYV_INTEL,      CL_UNORM_INT8},     {GMM_FORMAT_YUY2,                     GFX3DSTATE_SURFACEFORMAT_YCRCB_NORMAL            , 0, 2, 1, 2}},
-    {{CL_UYVY_INTEL,      CL_UNORM_INT8},     {GMM_FORMAT_UYVY,                     GFX3DSTATE_SURFACEFORMAT_YCRCB_SWAPY             , 0, 2, 1, 2}},
-    {{CL_YVYU_INTEL,      CL_UNORM_INT8},     {GMM_FORMAT_YVYU,                     GFX3DSTATE_SURFACEFORMAT_YCRCB_SWAPUV            , 0, 2, 1, 2}},
-    {{CL_VYUY_INTEL,      CL_UNORM_INT8},     {GMM_FORMAT_VYUY,                     GFX3DSTATE_SURFACEFORMAT_YCRCB_SWAPUVY           , 0, 2, 1, 2}}
+    {{CL_YUYV_INTEL,      CL_UNORM_INT16},     {GMM_FORMAT_YCRCB_NORMAL,                     GFX3DSTATE_SURFACEFORMAT_YCRCB_NORMAL            , 0, 2, 1, 2}},
+    {{CL_UYVY_INTEL,      CL_UNORM_INT16},     {GMM_FORMAT_YCRCB_SWAPY,                     GFX3DSTATE_SURFACEFORMAT_YCRCB_SWAPY             , 0, 2, 1, 2}},
+    {{CL_YVYU_INTEL,      CL_UNORM_INT16},     {GMM_FORMAT_YCRCB_SWAPUV,                     GFX3DSTATE_SURFACEFORMAT_YCRCB_SWAPUV            , 0, 2, 1, 2}},
+    {{CL_VYUY_INTEL,      CL_UNORM_INT16},     {GMM_FORMAT_YCRCB_SWAPUVY,                     GFX3DSTATE_SURFACEFORMAT_YCRCB_SWAPUVY           , 0, 2, 1, 2}}
 };
 
 const ClSurfaceFormatInfo SurfaceFormats::planarYuvSurfaceFormats[] = {

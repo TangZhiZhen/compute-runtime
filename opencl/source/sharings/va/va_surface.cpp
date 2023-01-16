@@ -60,7 +60,10 @@ VAStatus VASurface::getSurfaceDescription(SharedSurfaceInfo &surfaceInfo, VAShar
             return VA_STATUS_ERROR_INVALID_PARAMETER;
         }
 
-        if (surfaceInfo.plane == 1) {
+        if (surfaceInfo.plane == 0) {
+            surfaceInfo.imageOffset = vaDrmPrimeSurfaceDesc.layers[0].offset[0];
+            surfaceInfo.imagePitch = vaDrmPrimeSurfaceDesc.layers[0].pitch[0];
+        } else if (surfaceInfo.plane == 1) {
             surfaceInfo.imageOffset = vaDrmPrimeSurfaceDesc.layers[1].offset[0];
             surfaceInfo.imagePitch = vaDrmPrimeSurfaceDesc.layers[1].pitch[0];
         } else if (surfaceInfo.plane == 2) {
@@ -147,7 +150,12 @@ void VASurface::applyPlaneSettings(SharedSurfaceInfo &sharedSurfaceInfo, cl_uint
 }
 
 void VASurface::applyPackedOptions(SharedSurfaceInfo &sharedSurfaceInfo) {
+    sharedSurfaceInfo.imgInfo.plane = GMM_PLANE_Y;
     sharedSurfaceInfo.channelOrder = CL_YUYV_INTEL;
+    sharedSurfaceInfo.channelType = CL_UNORM_INT16;
+    sharedSurfaceInfo.imgInfo.offset = sharedSurfaceInfo.imageOffset;
+    sharedSurfaceInfo.imgInfo.rowPitch = sharedSurfaceInfo.imagePitch;
+    sharedSurfaceInfo.imgInfo.yOffsetForUVPlane = 1;
     sharedSurfaceInfo.imgInfo.surfaceFormat = &VASurface::getExtendedSurfaceFormatInfo(sharedSurfaceInfo.imageFourcc)->surfaceFormat;
 }
 
@@ -250,21 +258,21 @@ const ClSurfaceFormatInfo *VASurface::getExtendedSurfaceFormatInfo(uint32_t form
     if (formatFourCC == VA_FOURCC_P010) {
         static const ClSurfaceFormatInfo formatInfoP010 = {{CL_NV12_INTEL, CL_UNORM_INT16},
                                                            {GMM_RESOURCE_FORMAT::GMM_FORMAT_P010,
-                                                            static_cast<GFX3DSTATE_SURFACEFORMAT>(NUM_GFX3DSTATE_SURFACEFORMATS), // not used for plane images
+                                                            static_cast<GFX3DSTATE_SURFACEFORMAT>(GFX3DSTATE_SURFACEFORMAT_PLANAR_420_16), // not used for plane images
                                                             0,
-                                                            1,
                                                             2,
-                                                            2}};
+                                                            1,
+                                                            1}};
         return &formatInfoP010;
     }
     if (formatFourCC == VA_FOURCC_P016) {
         static const ClSurfaceFormatInfo formatInfoP016 = {{CL_NV12_INTEL, CL_UNORM_INT16},
                                                            {GMM_RESOURCE_FORMAT::GMM_FORMAT_P016,
-                                                            static_cast<GFX3DSTATE_SURFACEFORMAT>(NUM_GFX3DSTATE_SURFACEFORMATS), // not used for plane images
+                                                            static_cast<GFX3DSTATE_SURFACEFORMAT>(GFX3DSTATE_SURFACEFORMAT_PLANAR_420_16), // not used for plane images
                                                             0,
-                                                            1,
                                                             2,
-                                                            2}};
+                                                            1,
+                                                            1}};
         return &formatInfoP016;
     }
     if (formatFourCC == VA_FOURCC_RGBP) {
@@ -278,8 +286,8 @@ const ClSurfaceFormatInfo *VASurface::getExtendedSurfaceFormatInfo(uint32_t form
         return &formatInfoRGBP;
     }
     if (formatFourCC == VA_FOURCC_YUY2) {
-        static const ClSurfaceFormatInfo formatInfoYUY2 = {{CL_YUYV_INTEL, CL_UNORM_INT8},
-                                                           {GMM_RESOURCE_FORMAT::GMM_FORMAT_YUY2,
+        static const ClSurfaceFormatInfo formatInfoYUY2 = {{CL_YUYV_INTEL, CL_UNORM_INT16},
+                                                           {GMM_RESOURCE_FORMAT::GMM_FORMAT_YCRCB_NORMAL,
                                                             static_cast<GFX3DSTATE_SURFACEFORMAT>(GFX3DSTATE_SURFACEFORMAT_YCRCB_NORMAL),
                                                             0,
                                                             2,
